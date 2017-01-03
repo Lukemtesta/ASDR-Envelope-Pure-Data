@@ -1,0 +1,231 @@
+#N canvas 593 22 638 325 10;
+#X obj 93 -39 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 10100 1;
+#X text 7 4 Osc Frequency;
+#X obj 93 127 osc~;
+#X obj 93 92 * 5;
+#X floatatom 93 110 5 0 0 0 - - -;
+#X obj 137 376 tabwrite~ osctest;
+#X obj 284 -40 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 12700 1;
+#X text 216 5 Peak Value;
+#X obj 329 -38 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 900 1;
+#X text 313 371 Test to see if metro will draw graph continuously;
+#X text 314 192 ADSR function;
+#X floatatom 284 91 5 0 0 0 - - -;
+#X text 233 58 Trigger;
+#X obj 251 78 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 198 218 *~;
+#N canvas 0 22 450 300 autobang 0;
+#X obj 215 203 outlet;
+#X obj 215 180 bang;
+#X obj 215 163 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 215 142 metro 100;
+#X obj 266 96 inlet;
+#X obj 189 97 inlet;
+#X connect 1 0 0 0;
+#X connect 2 0 1 0;
+#X connect 3 0 2 0;
+#X connect 4 0 3 0;
+#X connect 5 0 3 0;
+#X restore 30 340 pd autobang;
+#X obj 201 243 dac~;
+#X obj 329 94 * 20;
+#X text 317 9 A;
+#X floatatom 329 112 5 0 0 0 - - -;
+#X msg 93 323 stop;
+#X msg 30 321 1;
+#X text 72 179 Input Signal;
+#X obj 368 -38 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 9000 1;
+#X floatatom 368 110 5 0 0 0 - - -;
+#X obj 368 92 * 10;
+#X text 355 8 D;
+#X obj 407 -38 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 9300 1;
+#X text 394 8 S;
+#X floatatom 407 92 5 0 0 0 - - -;
+#N canvas 38 367 1221 430 adsr 1;
+#X obj 314 29 inlet;
+#X obj 377 27 inlet;
+#X text 299 8 Peak Value;
+#X obj 326 388 line~;
+#X text 376 9 Attack;
+#X obj 214 32 inlet;
+#X text 210 11 Trigger;
+#X obj 214 351 select 0;
+#X obj 327 404 outlet~;
+#N canvas 0 22 450 300 adsr 0;
+#X obj 203 262 outlet;
+#X obj 105 39 inlet;
+#X floatatom 127 138 5 0 0 0 - - -;
+#X text 58 16 ADSR Trigger off = 1;
+#X text 236 12 ADSR Trigger on = 1;
+#X obj 102 120 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 126 178 bang;
+#X msg 132 216 0;
+#X msg 182 75 stop;
+#X text 178 -3 comment;
+#X obj 252 36 inlet;
+#X text 169 112 If trigger input is off \, force line~ 0 output.;
+#X text 167 129 else if trigger is on \, bypass force zero metro loop
+and let adsr parameters vary line~ o/p.;
+#X obj 102 94 metro;
+#X connect 1 0 13 0;
+#X connect 2 0 6 0;
+#X connect 5 0 2 0;
+#X connect 6 0 7 0;
+#X connect 7 0 0 0;
+#X connect 8 0 13 0;
+#X connect 10 0 8 0;
+#X connect 13 0 5 0;
+#X restore 214 370 pd adsr on/off;
+#X obj 443 27 inlet;
+#X obj 531 26 inlet;
+#X obj 646 26 inlet;
+#X text 527 5 Sustain;
+#X text 442 5 Decay;
+#X text 643 3 Release;
+#X text 854 6 Note on/off;
+#X obj 327 321 pack f f;
+#X obj 867 41 == 0;
+#X msg 867 59 bang;
+#X obj 646 44 value Rel;
+#X obj 876 79 value Rel;
+#X obj 827 366 pack f f;
+#X msg 828 89 0;
+#X obj 867 25 inlet;
+#X floatatom 314 48 5 0 0 0 - - -;
+#X floatatom 377 44 5 0 0 0 - - -;
+#X obj 314 64 value P;
+#X obj 327 304 value P;
+#X msg 749 62 bang;
+#X obj 749 44 select 1;
+#X obj 479 156 delay;
+#X obj 443 45 value D;
+#X obj 531 77 value S;
+#X obj 655 176 bang;
+#X floatatom 629 230 5 0 0 0 - - -;
+#X floatatom 677 228 5 0 0 0 - - -;
+#X text 895 112 Note off = Release;
+#X obj 629 212 value S;
+#X obj 676 211 value D;
+#X obj 629 247 pack f f;
+#X text 1032 296 Once decayed \, sustain controls signals level;
+#X obj 541 42 > 0;
+#X obj 531 59 *;
+#X text 220 153 Trigger acts as ADSR power;
+#X text 623 265 wait until attack finish at peak value to begin decay
+to sustain level;
+#X text 743 11 Note on triggers attack;
+#X connect 0 0 25 0;
+#X connect 1 0 26 0;
+#X connect 1 0 31 1;
+#X connect 3 0 8 0;
+#X connect 5 0 7 0;
+#X connect 7 0 9 0;
+#X connect 7 1 9 1;
+#X connect 9 0 3 0;
+#X connect 10 0 32 0;
+#X connect 11 0 42 0;
+#X connect 11 0 43 0;
+#X connect 12 0 20 0;
+#X connect 17 0 3 0;
+#X connect 18 0 19 0;
+#X connect 19 0 21 0;
+#X connect 19 0 23 0;
+#X connect 21 0 22 1;
+#X connect 22 0 3 0;
+#X connect 23 0 22 0;
+#X connect 24 0 18 0;
+#X connect 24 0 30 0;
+#X connect 25 0 27 0;
+#X connect 26 0 17 1;
+#X connect 28 0 17 0;
+#X connect 29 0 28 0;
+#X connect 29 0 31 0;
+#X connect 30 0 29 0;
+#X connect 31 0 34 0;
+#X connect 34 0 38 0;
+#X connect 34 0 39 0;
+#X connect 35 0 40 0;
+#X connect 36 0 40 1;
+#X connect 38 0 35 0;
+#X connect 39 0 36 0;
+#X connect 40 0 3 0;
+#X connect 42 0 43 1;
+#X connect 43 0 33 0;
+#X restore 251 174 pd adsr trig peak att dec sus rel note;
+#X obj 455 -37 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 10900 1;
+#X floatatom 454 115 5 0 0 0 - - -;
+#X text 440 8 R;
+#X obj 455 97 * 20;
+#X obj 523 103 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 496 81 Note on/off;
+#X text 554 103 here is my problem;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array osctest 1000 float 3;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+#X coords 0 130 999 -130 200 140 1;
+#X restore 352 228 graph;
+#X connect 0 0 3 0;
+#X connect 2 0 14 0;
+#X connect 3 0 4 0;
+#X connect 4 0 2 0;
+#X connect 6 0 11 0;
+#X connect 8 0 17 0;
+#X connect 11 0 30 1;
+#X connect 13 0 30 0;
+#X connect 14 0 5 0;
+#X connect 14 0 16 0;
+#X connect 14 0 16 1;
+#X connect 15 0 5 0;
+#X connect 17 0 19 0;
+#X connect 19 0 30 2;
+#X connect 20 0 15 1;
+#X connect 21 0 15 0;
+#X connect 23 0 25 0;
+#X connect 24 0 30 3;
+#X connect 25 0 24 0;
+#X connect 27 0 29 0;
+#X connect 29 0 30 4;
+#X connect 30 0 14 1;
+#X connect 31 0 34 0;
+#X connect 32 0 30 5;
+#X connect 34 0 32 0;
+#X connect 35 0 30 6;
